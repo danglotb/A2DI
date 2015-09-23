@@ -2,24 +2,31 @@
 Simple demo with multiple subplots.
 """
 import numpy as np
+from pylab import *
 import matplotlib.pyplot as plt
 
-def plotFile(x, y):
-	fx = open(x, 'r')
-	fy = open(y, 'r')
+x='x.txt'
+y='y.txt'
 
-	ax = []
-	ay = []
+fx = open(x, 'r')
+fy = open(y, 'r')
 
-	for line in fx:
-		ax.append(line)
-	for line in fy:
-		ay.append(line)
+ax = []
+ay = []
 
-	ax = np.array(ax)
-	ay = np.array(ay)
+for line in fx:
+	ax.append(float(line))
+for line in fy:
+	ay.append(float(line))
 
-	plt.plot(ax,ay,'bs')
-	plt.show()
+mx = np.matrix([ax,np.ones(len(ax))])
+my = np.array(ay)
+
+np.multiply( inv(np.dot(mx,mx.transpose())) , np.dot(mx,my))
+
+ax = np.array(ax)
+ay = np.array(ay)
+plt.plot(ax,ay,'bs')
+plt.show()
 
 
