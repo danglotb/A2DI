@@ -1,6 +1,3 @@
-"""
-Simple demo with multiple subplots.
-"""
 import numpy as np
 from pylab import *
 import matplotlib.pyplot as plt
@@ -22,11 +19,14 @@ for line in fy:
 mx = np.matrix([ax,np.ones(len(ax))])
 my = np.array(ay)
 
-np.multiply( inv(np.dot(mx,mx.transpose())) , np.dot(mx,my))
+theta=np.multiply(inv(np.dot(mx,mx.transpose())) , np.dot(mx,my))
 
-ax = np.array(ax)
-ay = np.array(ay)
-plt.plot(ax,ay,'bs')
+nax = np.array(ax)
+nay = np.array(ay)
+plt.plot(nax,nay,'bs')
+
+f=np.linspace(min(ax), max(ax))
+
+plt.plot(f,np.add(np.multiply(f,theta[0,0]) , theta[1,1]))
+
 plt.show()
-
-
