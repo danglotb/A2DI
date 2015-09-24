@@ -2,6 +2,12 @@ import numpy as np
 from pylab import *
 import matplotlib.pyplot as plt
 
+def fitness(predicted, measured, coord_x):
+	acc = 0	
+	for i in range(len(predicted)):
+		acc+= math.sqrt(pow(predicted[i]-measured[i],2))
+	print(acc/len(predicted))
+
 def crossValid(ax, ay, begT, endT, testData, testValue):
 	mx = np.matrix([ax[begT:endT],np.ones(endT-begT)])
 	my = np.array(ay[begT:endT])
@@ -16,10 +22,11 @@ def crossValid(ax, ay, begT, endT, testData, testValue):
 	#test
 	naxd = np.array(testData)
 	nayd = np.array(testValue)
-	naym = [] 
+	naym = []
 	for i in range(len(testData)):
 		naym.append(testData[i]*theta[0,0]+theta[1,1])
 	naym = np.array(naym)
+	fitness(naym,nayd,naxd)
 	plt.plot(naxd,nayd,'gs')
 	plt.plot(naxd,naym)
 	plt.show()
@@ -52,6 +59,7 @@ for line in fy:
 	ay.append(float(line))
 #1rst learn the model
 #learnModel(ax,ay)
+
 #2nd cross validation
 crossValid(ax,ay,0,80,ax[80:100],ay[80:100])
 crossValid(ax,ay,10,90,ax[0:10]+ax[90:100],ay[0:10]+ay[90:100])
