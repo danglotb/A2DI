@@ -2,11 +2,14 @@ import numpy as np
 from pylab import *
 import matplotlib.pyplot as plt
 
+score = []
+thetas = []
+
 def fitness(predicted, measured, coord_x):
 	acc = 0	
 	for i in range(len(predicted)):
 		acc+= math.sqrt(pow(predicted[i]-measured[i],2))
-	print(acc/len(predicted))
+	score.append(acc/len(predicted))
 
 def crossValid(ax, ay, begT, endT, testData, testValue):
 	mx = np.matrix([ax[begT:endT],np.ones(endT-begT)])
@@ -17,6 +20,7 @@ def crossValid(ax, ay, begT, endT, testData, testValue):
 	nax = np.array(ax[begT:endT])
 	nay = np.array(ay[begT:endT])
 	plt.plot(nax,nay,'bs')
+	thetas.append(theta)
 	plt.plot(f,np.add(np.multiply(f,theta[0,0]),theta[1,1]))
 
 	#test
@@ -64,6 +68,9 @@ for line in fy:
 crossValid(ax,ay,0,80,ax[80:100],ay[80:100])
 crossValid(ax,ay,10,90,ax[0:10]+ax[90:100],ay[0:10]+ay[90:100])
 crossValid(ax,ay,20,80,ax[0:20],ay[0:20])
+
+print(str(thetas[score.index(min(score))][0,0])+"x+"+str(thetas[score.index(min(score))][1,1]))
+print(min(score))
 
 
 
