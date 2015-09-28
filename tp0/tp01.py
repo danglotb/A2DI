@@ -11,7 +11,7 @@ def fitness(predicted, measured, coord_x):
 		acc+= math.sqrt(pow(predicted[i]-measured[i],2))
 	score.append(acc/len(predicted))
 
-def crossValidation(ax,ay,index):
+def crossValidation(ax,ay,index, b = False):
 	for i in range(5):
 		begT = i*20
 		endT = (i+1)*20
@@ -29,9 +29,10 @@ def crossValidation(ax,ay,index):
 
 		nax = np.array(x)
 		nay = np.array(y)
-		plt.plot(nax,nay,'bs')
 		thetas.append(theta)
-		plt.plot(f,np.add(np.multiply(f,theta[0,0]),theta[1,1]))
+		if b:	
+			plt.plot(nax,nay,'bs')
+			plt.plot(f,np.add(np.multiply(f,theta[0,0]),theta[1,1]))
 		
 		x = []
 		y = []
@@ -46,11 +47,10 @@ def crossValidation(ax,ay,index):
 			naym.append(x[i]*theta[0,0]+theta[1,1])
 		naym = np.array(naym)
 		fitness(naym,nayd,naxd)
-		plt.plot(naxd,nayd,'gs')
-		plt.plot(naxd,naym)
-		plt.show()
-
-				
+		if b:
+			plt.plot(naxd,nayd,'gs')
+			plt.plot(naxd,naym)
+			plt.show()
 
 def learnModel(ax,ay):
 	mx = np.matrix([ax,np.ones(len(ax))])
