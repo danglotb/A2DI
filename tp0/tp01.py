@@ -11,29 +11,46 @@ def fitness(predicted, measured, coord_x):
 		acc+= math.sqrt(pow(predicted[i]-measured[i],2))
 	score.append(acc/len(predicted))
 
-def crossValid(ax, ay, begT, endT, testData, testValue):
-	mx = np.matrix([ax[begT:endT],np.ones(endT-begT)])
-	my = np.array(ay[begT:endT])
-	theta=np.multiply(inv(np.dot(mx,mx.transpose())),np.dot(mx,my))
-	f=np.linspace(min(ax[begT:endT]), max(ax[begT:endT]))
-	#data
-	nax = np.array(ax[begT:endT])
-	nay = np.array(ay[begT:endT])
-	plt.plot(nax,nay,'bs')
-	thetas.append(theta)
-	plt.plot(f,np.add(np.multiply(f,theta[0,0]),theta[1,1]))
+def crossValidation(ax,ay,index):
+	for i in range(5):
+		begT = i*20
+		endT = (i+1)*20
+		x = []
+		y = []
+		for j in range(100):
+			if j not in index[begT:endT]:
+				x.append(ax[j])
+				y.append(ay[j])
 
-	#test
-	naxd = np.array(testData)
-	nayd = np.array(testValue)
-	naym = []
-	for i in range(len(testData)):
-		naym.append(testData[i]*theta[0,0]+theta[1,1])
-	naym = np.array(naym)
-	fitness(naym,nayd,naxd)
-	plt.plot(naxd,nayd,'gs')
-	plt.plot(naxd,naym)
-	plt.show()
+		mx = np.matrix([x,np.ones(len(x))])
+		my = np.array(y)
+		theta=np.multiply(inv(np.dot(mx,mx.transpose())),np.dot(mx,my))
+		f=np.linspace(min(x), max(x))
+
+		nax = np.array(x)
+		nay = np.array(y)
+		plt.plot(nax,nay,'bs')
+		thetas.append(theta)
+		plt.plot(f,np.add(np.multiply(f,theta[0,0]),theta[1,1]))
+		
+		x = []
+		y = []
+		for j in range(100):
+			if j in index[begT:endT]:
+				x.append(ax[j])
+				y.append(ay[j])
+		naxd = np.array(x)
+		nayd = np.array(y)
+		naym = []
+		for i in range(len(x)):
+			naym.append(x[i]*theta[0,0]+theta[1,1])
+		naym = np.array(naym)
+		fitness(naym,nayd,naxd)
+		plt.plot(naxd,nayd,'gs')
+		plt.plot(naxd,naym)
+		plt.show()
+
+				
 
 def learnModel(ax,ay):
 	mx = np.matrix([ax,np.ones(len(ax))])
@@ -61,18 +78,13 @@ for line in fx:
 	ax.append(float(line))
 for line in fy:
 	ay.append(float(line))
+
 #1rst learn the model
 #learnModel(ax,ay)
-
 #2nd cross validation
-crossValid(ax,ay,0,80,ax[80:100],ay[80:100])
-crossValid(ax,ay,10,90,ax[0:10]+ax[90:100],ay[0:10]+ay[90:100])
-crossValid(ax,ay,20,80,ax[0:20],ay[0:20])
-
+index = np.arange(100)
+shuffle(index)
+crossValidation(ax,ay,index)
 print(str(thetas[score.index(min(score))][0,0])+"x+"+str(thetas[score.index(min(score))][1,1]))
 print(min(score))
 
-
-
-
-	
