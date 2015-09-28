@@ -88,3 +88,6 @@ crossValidation(ax,ay,index)
 print(str(thetas[score.index(min(score))][0,0])+"x+"+str(thetas[score.index(min(score))][1,1]))
 print(min(score))
 
+fx.close()
+fy.close()
+
