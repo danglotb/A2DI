@@ -4,14 +4,12 @@ import matplotlib.pyplot as plt
 from sklearn.linear_model import Ridge
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.pipeline import make_pipeline
+from sklearn import cross_validation
 
+k = 10
 
-def f(x):
-    """ function to approximate by polynomial interpolation"""
-    return x * np.sin(x)
-
-x='x2.txt'
-y='y2.txt'
+x = 'x2.txt'
+y = 'y2.txt'
 
 fx = open(x, 'r')
 fy = open(y, 'r')
@@ -24,31 +22,36 @@ for line in fx:
 for line in fy:
 	ay.append(float(line))
 
-# generate points used to plot
-x_plot = np.linspace(0, 10, 100)
+x = np.array(ax)[:, np.newaxis]
+y = np.array(ay)
 
-# generate points and keep a subset of them
-x = np.linspace(0, 10, 100)
-rng = np.random.RandomState(0)
-rng.shuffle(x)
-x = np.sort(x[:20])
-y = f(x)
+x_plot = np.array(ax)[:, np.newaxis]
 
-# create matrix versions of these arrays
-X = x[:, np.newaxis]
-X_plot = x_plot[:, np.newaxis]
+bestScore = -1
 
-plt.plot(x_plot, f(x_plot), label="ground truth")
-plt.scatter(x, y, label="training points")
+kf = cross_validation.KFold(len(ax),k,shuffle=True)
 
-for degree in [3, 4, 5]:
-    model = make_pipeline(PolynomialFeatures(degree), Ridge())
-    model.fit(X, y)
-    y_plot = model.predict(X_plot)
-    plt.plot(x_plot, y_plot, label="degree %d" % degree)
+for train, test in kf:
+	xTrain = x[train]
+	yTrain = y[train]
+	xTest = x[test]
+	yTest = y[test]
+	for degree in range(1, 24):
+		model = make_pipeline(PolynomialFeatures(degree), Ridge())
+		model.fit(xTrain, yTrain)
+		tmpScore = model.score(xTest,yTest)
+		if tmpScore > bestScore:
+			bestScore = tmpScore
+			y_plotBest = model.predict(x_plot)
+			bestDegree = degree
+
+plt.plot(x_plot, y_plotBest, label="degree %d" % bestDegree)
+
+nax = np.array(ax)
+nay = np.array(ay)
+plt.plot(nax,nay,'bs')
 
 plt.legend(loc='lower left')
-
 plt.show()
 
 fx.close()
