@@ -3,11 +3,11 @@ from pylab import *
 import matplotlib.pyplot as plt
 import random as r
 
-b = 5
-theta1 = 2
-theta2 = 5
-mu, sigma = 0, 1
+#fonction f to compute y from x
+def f(x, tone, ttwo, e):
+	return tone + ttwo * x + e
 
+#compute
 def compute(N, b, theta1, theta2, mu, sigma):
 
 	x = []
@@ -23,6 +23,14 @@ def compute(N, b, theta1, theta2, mu, sigma):
 
 	mx = np.matrix([ax,np.ones(len(ax))])
 	my = np.array(ay)
-	theta=np.multiply(inv(np.dot(mx,mx.transpose())) , np.dot(mx,my))
 
-	return j(N, ay, theta, ax)
+	A = np.multiply((1/pow(sigma,2)), np.dot(mx,mx.transpose()))
+
+	tbar = np.multiply(1/pow(sigma,2), np.multiply(np.dot(inv(A).transpose(), mx), y))
+
+b = 5
+theta1 = 2
+theta2 = 5
+mu, sigma = 0, 1
+
+compute(1000, b, theta1, theta2, mu, sigma)
