@@ -31,6 +31,8 @@ bestScore = -1
 
 kf = cross_validation.KFold(len(ax),k,shuffle=True)
 
+#using SciKit to do the crossValidation + polynomial interpolation
+#it will keep the best degree (function and plot) to display it after
 for train, test in kf:
 	xTrain = x[train]
 	yTrain = y[train]

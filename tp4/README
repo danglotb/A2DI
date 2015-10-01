@@ -1,0 +1,8 @@
+Benjamin DANGLOT
+
+TP4 : Régression
+
+1. Le script va afficher le plot score=f(N) et score=f(Sigma). Il genere un jeu de donnees aleatoire.
+Comme on pourrait le deviner, plus N est grand, plus le score est bon (bas) car on a beaucoup de donnees, et au contraire, plus la pertubation (sigma) est grande, plus le score se degrade.
+
+2. 

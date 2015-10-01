@@ -5,12 +5,14 @@ import matplotlib.pyplot as plt
 score = []
 thetas = []
 
+#fun of fitness (compute the distance between the point and the fun
 def fitness(predicted, measured, coord_x):
 	acc = 0	
 	for i in range(len(predicted)):
 		acc+= math.sqrt(pow(predicted[i]-measured[i],2))
 	score.append(acc/len(predicted))
 
+#crossValidation function, if b is True, it will display a plot
 def crossValidation(ax,ay,index, b = False):
 	for i in range(5):
 		begT = i*20
@@ -52,6 +54,7 @@ def crossValidation(ax,ay,index, b = False):
 			plt.plot(naxd,naym)
 			plt.show()
 
+#not used, it was to test, the core of this fun is paste in the crossvalidation function
 def learnModel(ax,ay):
 	mx = np.matrix([ax,np.ones(len(ax))])
 	my = np.array(ay)
@@ -84,7 +87,12 @@ for line in fy:
 #2nd cross validation
 index = np.arange(100)
 shuffle(index)
-crossValidation(ax,ay,index)
+
+if len(sys.argv) > 1:
+	crossValidation(ax,ay,index, b=True)
+else:
+	crossValidation(ax,ay,index)
+
 print(str(thetas[score.index(min(score))][0,0])+"x+"+str(thetas[score.index(min(score))][1,1]))
 print(min(score))
 
