@@ -7,6 +7,9 @@ import random as r
 def f(x, tone, ttwo, e):
 	return tone + ttwo * x + e
 
+def normal(x,mu,sigma):
+	return np.exp(np.multiply((-1/2),pow((np.subtract(x,mu)/sigma),2)))
+
 #compute
 def compute(N, b, theta1, theta2, mu, sigma):
 
@@ -24,9 +27,11 @@ def compute(N, b, theta1, theta2, mu, sigma):
 	mx = np.matrix([ax,np.ones(len(ax))])
 	my = np.array(ay)
 
-	A = np.multiply((1/pow(sigma,2)), np.dot(mx,mx.transpose()))
-
-	tbar = np.multiply(1/pow(sigma,2), np.multiply(np.dot(inv(A).transpose(), mx), y))
+	SigmaM =  np.multiply(pow(sigma,2),np.identity(2))
+	A = inv(np.dot( np.multiply((1/pow(sigma,2)), mx), mx.transpose()) + inv(SigmaM))
+	tbar = np.dot(np.dot(np.multiply(1/pow(sigma,2), A), mx), my)
+	
+	p =  np.random.normal(tbar,A)
 
 b = 5
 theta1 = 2
