@@ -58,7 +58,8 @@ def softmax(k, vi, n, To):
 	return Ti,Xi
 
 def beta_law(a,b,v):
-	return 2 * pow(v, a-1) * pow( (1-v), b-1)#zz a revoir
+	alpha = 2
+	return alpha * pow(v, a-1) * pow( (1-v), b-1)#zz a revoir
 
 def thompson_sampling(k,n,vi):
 	alpha = 1
@@ -87,14 +88,16 @@ def thompson_sampling(k,n,vi):
 
 def ucb(k,n,vi):
 	Ti = []
+	for i in range(n):
+		Ti.append(0)
 	muchapeau = np.zeros(k)
 	Xi = np.zeros((n,k))
 	array = []
-	alpha=1
+	alpha = 2
 	for i in range(n): 
 		for z in range(k):
-			array.append(muchapeau[z]+math.sqrt( (alpha*math.log(i)) / countT[Ti,i,z]))
-		Ti[i]= (np.where(array==np.amax(array)))[0][0]		
+			array.append(muchapeau[z]+math.sqrt( (alpha*math.log(i+1)) / countT(Ti,i,z)))
+		Ic = (np.where(array==np.amax(array)))[0][0]	
 		Ti[i] = Ic
 		if i != 0:
 			for z in range(k):
@@ -102,10 +105,12 @@ def ucb(k,n,vi):
 		if random.random() <= vi[Ic]:#success
 			Xi[i][Ic] = 1 if i == 0 else Xi[i-1][Ic]+1
 		muchapeau[Ic] = Xi[i][Ic] / countT(Ti,i,Ic)
+		array.clear()
 	return Ti,Xi
 	
 
-def esp_greedy(k, vi, esp, n):
+def esp_greedy(k, vi, n):
+	esp = 0.5
 	Ti = []
 	for i in range(n):
 		Ti.append(0)
@@ -126,22 +131,21 @@ def esp_greedy(k, vi, esp, n):
 	return Ti,Xi
 
 
-k=10
-n=50
-esp=0.5
-nbrun=30
-vi = []
+k=10#nombre de bras
+n=100#temps
+nbrun=30#nombre de repetition de l'experience
+vi = []#distribution de probabilité de reussite pour chaque bras
 for i in range(k):
 	vi.append(random.random())
 
-best_arm = max(vi)
+best_arm = max(vi)#recuperation du "meilleur" bras pour calculer le regret (apres experience)
 
 loose_at_t = np.zeros((nbrun,n))
 gain_total = np.zeros((nbrun,n))
 
 for run in range(nbrun):
 
-	#ret=esp_greedy(k, vi, esp, n)
+	#ret=esp_greedy(k, vi, n)
 	#ret=softmax(k, vi, n)doesn't work
 	#ret=softmax(k, vi, n, To = 0.1)
 	ret=thompson_sampling(k,n,vi)
@@ -157,6 +161,7 @@ for run in range(nbrun):
 			total_at_t += Xi[i][z]
 		gain_total[run][i] = total_at_t
 
+#calcul des moyennes de gain et de regret
 for i in range(n):
 	cum_gain = 0
 	cum_loose = 0
