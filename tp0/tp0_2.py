@@ -29,10 +29,15 @@ x_plot = np.array(ax)[:, np.newaxis]
 
 bestScore = -1
 
+print("Initialisation de la cross_validation avec Sklearn avec k = ",k," .....")
+
 kf = cross_validation.KFold(len(ax),k,shuffle=True)
 
 #using SciKit to do the crossValidation + polynomial interpolation
 #it will keep the best degree (function and plot) to display it after
+
+print("on itère avec un degré de 1 à 24 et on retient le meilleur : celui qui a meilleur retourner par SKLearn")
+
 for train, test in kf:
 	xTrain = x[train]
 	yTrain = y[train]
@@ -47,6 +52,7 @@ for train, test in kf:
 			y_plotBest = model.predict(x_plot)
 			bestDegree = degree
 
+
 plt.plot(x_plot, y_plotBest, label="degree %d" % bestDegree)
 
 nax = np.array(ax)
@@ -58,3 +64,7 @@ plt.show()
 
 fx.close()
 fy.close()
+
+print("On trouve comme meilleur degree",bestDegree)
+
+

@@ -4,8 +4,7 @@ TP0 Régression linéaire
 
 1. Apprendre le model : Apprentissage du model dans la function learnModel() de tp0_1.py
 
-2. Caluler le risque empirique (par validation croisée) : Utilisation du 1. pour mettre en
-place une validation croisée. Le main affichira les meilleurs thetas (ceux qui obtienne un risque empirique plus faible). Si on donne un argument (python3 tp0_1.py 1 par exemple) le script affichera un plot pour chaque itération de la cross-validation(ceux en vers sont ceux utilise pour le test). Elle utilise k = 5 iterations, et selectionne aleatoirement les points dans le jeu de données (80% d'apprentissage, 20% de test).
+2. Caluler le risque empirique (par validation croisée) : le script affiche les fonctions calculées et les risques empiriques de chaque itérations. On peut obtenir les plots de chaque itération en donnant n'importe quel argument.(Des plots générés de la même façon sont disponibles dans l'archive). Les points bleues représentent les données utilisées pour apprendre, tandis que les verts sont ceux pour le test.
 
 3. Regression de SciKitLearn pour le jeu de donnees 2 : tp0_2.py
 Le script utilise la validation croisee de SciKit et affichera le degree qui obtient le meilleur risque empirique (utilisation de model.score pour le calculer).

@@ -33,7 +33,7 @@ def crossValidation(ax,ay,index, b = False):
 		nay = np.array(y)
 		thetas.append(theta)
 		if b:	
-			plt.plot(nax,nay,'bs')
+			plt.plot(nax,nay,'bs', label="training")
 			plt.plot(f,np.add(np.multiply(f,theta[0,0]),theta[1,1]))
 		
 		x = []
@@ -50,8 +50,9 @@ def crossValidation(ax,ay,index, b = False):
 		naym = np.array(naym)
 		fitness(naym,nayd,naxd)
 		if b:
-			plt.plot(naxd,nayd,'gs')
+			plt.plot(naxd,nayd,'gs', label="testing")
 			plt.plot(naxd,naym)
+			plt.legend()
 			plt.show()
 
 #not used, it was to test, the core of this fun is paste in the crossvalidation function
@@ -61,12 +62,15 @@ def learnModel(ax,ay):
 	theta=np.multiply(inv(np.dot(mx,mx.transpose())) , np.dot(mx,my))
 	f=np.linspace(min(ax), max(ax))
 	#fun ax+b
-	plt.plot(f,np.add(np.multiply(f,theta[0,0]),theta[1,1]))
+	plt.plot(f,np.add(np.multiply(f,theta[0,0]),theta[1,1]), label="function")
 	#data
 	nax = np.array(ax)
 	nay = np.array(ay)
-	plt.plot(nax,nay,'bs')
+	plt.plot(nax,nay,'bs', label="training")
+	plt.legend()
 	plt.show()
+
+print("Regression linéaire...")
 
 x='x.txt'
 y='y.txt'
@@ -83,19 +87,26 @@ for line in fy:
 	ay.append(float(line))
 
 #1rst learn the model
-#learnModel(ax,ay)
+print("Apprentissage du model... Affichage d'un plot du résultat")
+learnModel(ax,ay)
 #2nd cross validation
 index = np.arange(100)
 shuffle(index)
+
+print("Validation croisée..."
 
 if len(sys.argv) > 1:
 	crossValidation(ax,ay,index, b=True)
 else:
 	crossValidation(ax,ay,index)
 
-print(str(thetas[score.index(min(score))][0,0])+"x+"+str(thetas[score.index(min(score))][1,1]))
-print(min(score))
+
+for i in range(len(score)):
+	print("Fonction calculée par cross validation itération "+str(i)+": ")
+	print(str(thetas[i][0,0])+"x+"+str(thetas[i][1,1]))
+	print("Risque empirique "+str(i))
+	print(score[i])
+	print()
 
 fx.close()
 fy.close()
-

@@ -140,15 +140,19 @@ for i in range(k):
 
 best_arm = max(vi)#recuperation du "meilleur" bras pour calculer le regret (apres experience)
 
+'''
+##################  EPSILON GREEDY   ##################"
+'''
+
 loose_at_t = np.zeros((nbrun,n))
 gain_total = np.zeros((nbrun,n))
 
 for run in range(nbrun):
 
-	#ret=esp_greedy(k, vi, n)
+	ret=esp_greedy(k, vi, n)
 	#ret=softmax(k, vi, n)doesn't work
 	#ret=softmax(k, vi, n, To = 0.1)
-	ret=thompson_sampling(k,n,vi)
+	#ret=thompson_sampling(k,n,vi)
 	#ret=ucb(k,n,vi)
 
 	Xi=ret[1]
@@ -174,9 +178,120 @@ for i in range(n):
 x=np.arange(0,n)
 plt.plot(x,np.cumsum(loose_at_t[0]), label='regret')
 plt.plot(x,gain_total[0],label='gain')
+plt.xlabel("EPSILON GREEDY")
 plt.legend(loc='lower right')
 plt.show()
 
+'''
+##################  SOFTMAX  ##################"
+'''
 
+loose_at_t = np.zeros((nbrun,n))
+gain_total = np.zeros((nbrun,n))
 
+for run in range(nbrun):
 
+	ret=softmax(k, vi, n, To = 0.1)
+
+	Xi=ret[1]
+	Ti=ret[0]
+
+	for i in range(n):
+		loose_at_t[run][i] = best_arm-vi[Ti[i]]
+		total_at_t = 0
+		for z in range(k):
+			total_at_t += Xi[i][z]
+		gain_total[run][i] = total_at_t
+
+#calcul des moyennes de gain et de regret
+for i in range(n):
+	cum_gain = 0
+	cum_loose = 0
+	for run in range(nbrun):
+		cum_gain += gain_total[run][i]
+		cum_loose += loose_at_t[run][i]
+	gain_total[0][i] = (cum_gain / nbrun)
+	loose_at_t[0][i] = (cum_loose / nbrun)
+
+x=np.arange(0,n)
+plt.plot(x,np.cumsum(loose_at_t[0]), label='regret')
+plt.plot(x,gain_total[0],label='gain')
+plt.xlabel("SOFTMAX")
+plt.legend(loc='lower right')
+plt.show()
+
+'''
+##################  THOMPSON_SAMPLING   ##################"
+'''
+
+loose_at_t = np.zeros((nbrun,n))
+gain_total = np.zeros((nbrun,n))
+
+for run in range(nbrun):
+
+	ret=thompson_sampling(k,n,vi)
+	
+	Xi=ret[1]
+	Ti=ret[0]
+
+	for i in range(n):
+		loose_at_t[run][i] = best_arm-vi[Ti[i]]
+		total_at_t = 0
+		for z in range(k):
+			total_at_t += Xi[i][z]
+		gain_total[run][i] = total_at_t
+
+#calcul des moyennes de gain et de regret
+for i in range(n):
+	cum_gain = 0
+	cum_loose = 0
+	for run in range(nbrun):
+		cum_gain += gain_total[run][i]
+		cum_loose += loose_at_t[run][i]
+	gain_total[0][i] = (cum_gain / nbrun)
+	loose_at_t[0][i] = (cum_loose / nbrun)
+
+x=np.arange(0,n)
+plt.plot(x,np.cumsum(loose_at_t[0]), label='regret')
+plt.plot(x,gain_total[0],label='gain')
+plt.xlabel("THOMPSON SAMPLING")
+plt.legend(loc='lower right')
+plt.show()
+
+'''
+##################  UPPER CONFIDENCE BOUND   ##################"
+'''
+
+loose_at_t = np.zeros((nbrun,n))
+gain_total = np.zeros((nbrun,n))
+
+for run in range(nbrun):
+
+	ret=ucb(k,n,vi)
+
+	Xi=ret[1]
+	Ti=ret[0]
+
+	for i in range(n):
+		loose_at_t[run][i] = best_arm-vi[Ti[i]]
+		total_at_t = 0
+		for z in range(k):
+			total_at_t += Xi[i][z]
+		gain_total[run][i] = total_at_t
+
+#calcul des moyennes de gain et de regret
+for i in range(n):
+	cum_gain = 0
+	cum_loose = 0
+	for run in range(nbrun):
+		cum_gain += gain_total[run][i]
+		cum_loose += loose_at_t[run][i]
+	gain_total[0][i] = (cum_gain / nbrun)
+	loose_at_t[0][i] = (cum_loose / nbrun)
+
+x=np.arange(0,n)
+plt.plot(x,np.cumsum(loose_at_t[0]), label='regret')
+plt.plot(x,gain_total[0],label='gain')
+plt.xlabel("UCB")
+plt.legend(loc='lower right')
+plt.show()

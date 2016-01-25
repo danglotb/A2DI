@@ -48,7 +48,6 @@ print "La probabilite d'etre une femme est {0} et celle d'etre un homme est {1}.
 bins_h = [0]+range(160,220,5)+[300]
 bins_f = [0]+range(160,220,5)+[300]
 
-
 #Calcul des histogrammes 
 
 hist_h, edges_h = np.histogram(taille_h,bins=bins_h)
