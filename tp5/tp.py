@@ -50,6 +50,26 @@ for y in range(sizey):
 			else:
 				transition[y*sizex+x][a] = y*sizex+x-1
 
+trans=np.zeros((sizex*sizey,sizex*sizey,4))
+for y in range(sizey):
+	for x in range(sizex):
+		for a in range(4):
+			if (y == 0 and a == 0) or (x == sizex-1 and a == 1) or (y == sizey-1 and a == 2) or (x == 0 and a == 3):
+				index = y*sizex+x
+			elif a == 0:
+				index = (y-1)*sizex+x
+			elif a == 1:
+				index = y*sizex+x+1
+			elif a == 2:
+				index = (y+1)*sizex+x
+			elif a == 3:
+				index = y*sizex+x-1
+			trans[y*sizex+x][index][a]=0.85
+			for a2 in range(4):
+				if not a2 == a:
+					trans[y*sizex+x][index][a]=0.05
+					 
+	
 
 proba_res=1.0
 
