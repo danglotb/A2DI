@@ -83,10 +83,13 @@ err_spectre=[0]*K
 
 nbrun=1
 
+plt.plot(range(0,len(w_sorted)),w_sorted)
+plt.show()
 
+'''
 for _ in range(nbrun):
 	err_kmeans=np.add(err_kmeans,mykmeans(np.matrix(X), Label, np.matrix(X)))
 	err_spectre=np.add(err_spectre,mykmeans(u[:,1:K], Label, np.matrix(X)))
 
 print(np.divide(err_kmeans,nbrun))
-print(np.divide(err_spectre,nbrun))
+print(np.divide(err_spectre,nbrun))'''
