@@ -18,16 +18,15 @@ if (len(sys.argv) > 1):
 		rnd = random.randint(0,sizex*sizey-1)
 		if not rnd in walls and rnd != 1 and rnd != 3:
 			walls.append(rnd)
-
-print("Indices des "+str((sys.argv[1]))+" murs générés : "+ str(walls))
-for y in range(sizey):
-	line = "" 
-	for x in range(sizex):
-		if y*sizex+x in walls:
-			line += 'W'
-		else:
-			line += ' '
-	print(line)
+	print("Indices des "+str((sys.argv[1]))+" murs générés : "+ str(walls))
+	for y in range(sizey):
+		line = "" 
+		for x in range(sizex):
+			if y*sizex+x in walls:
+				line += 'W'
+			else:
+				line += ' '
+		print(line)
 
 
 
