@@ -4,14 +4,15 @@ import random
 import math
 import sys
 
-def selectAction(Q,rewards,state):
+def selectAction(Q,rewards,state,explore=True):
 	maxQ=-sys.maxsize
 	selectedAction = -1
 	possibleAction = []
 	
 	#explore
-	if random.random() > 0.80:
-		return random.randint(0,3)
+	if explore:
+		if random.random() > 0.80:
+			return random.randint(0,3)
 
 	#select the best action
 	for action in range(4):
@@ -81,15 +82,14 @@ for y in range(sizey):
 #Init Q_0
 print("Sarsa learning")
 Q=np.zeros((sizex*sizey, 4))
-nbTurn = 10
-for i in range(nbTurn):
+nbTurn = 1
+for _ in range(nbTurn):
 	s = start
 	a_p = selectAction(Q,rewards,s)
 	s = transition[s][a_p]
 	a = a_p
 	r_p = rewards[s][a_p]
 	while not s == goal:
-	#for i in range(100):
 		a_p = selectAction(Q,rewards,s)
 		s_p = transition[s][a_p]
 		r_p = rewards[s][a_p]
@@ -99,6 +99,11 @@ for i in range(nbTurn):
 		a = a_p
 
 print(Q)
-	
-	
+
+print("Solution ...")
+s = start
+while not s == goal:
+	a = selectAction(Q,rewards,s,explore=False)
+	s = transition[s][a]
+	print(a)			
 
