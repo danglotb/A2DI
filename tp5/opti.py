@@ -29,7 +29,7 @@ if (len(sys.argv) > 1):
 
 
 
-print("Gridworld : Politique aléatoire avec aléatoire (15%) sur le résultat de l'action")
+print("Gridworld : Calcul de la politique optimale")
 print("4 actions possibles : NORTH, EAST, SOUTH, WEST")
 print("Grille de taille 5x5 = 25")
 print("Case A (+10) en (0,1) -> (4,1)")
@@ -101,7 +101,6 @@ for y in range(sizey):
 		R_pi[y*sizex+x]=s
 
 print("Calcul de P_pi...[25x25]")
-P_pi2=np.zeros((sizey*sizex,sizey*sizex))
 P_pi=np.zeros((sizey*sizex,sizey*sizex))
 for y_pi in range(sizey):
 	for x_pi in range(sizex):	
