@@ -19,7 +19,7 @@ if (len(sys.argv) > 1):
 			walls.append(rnd)
 	print("Indices des "+str((sys.argv[1]))+" murs générés : "+ str(walls))
 	for y in range(sizey):
-		line = "" 
+		line = ""
 		for x in range(sizex):
 			if y*sizex+x in walls:
 				line += 'W'
@@ -81,9 +81,9 @@ for y in range(sizey):
 						new_state_x = (y*sizex)+x+v
 						if new_state_x >= sizex*sizey or new_state_x < 0:
 							new_state_x = (y*sizex)+x
-						if new_state_y in walls:	
+						if new_state_y in walls:
 							new_state_y = y*sizex+x
-						if new_state_x in walls:	
+						if new_state_x in walls:
 							new_state_x = y*sizex+x
 						if not new_state_y == new_state:
 							proba_transition[y*sizex+x][new_state_y][a] += (1-rnd)/3.0
@@ -99,22 +99,3 @@ for y in range(sizey):
 		for a in range(4):
 			s += prob_action * rewards[y*sizex+x][a]
 		R_pi[y*sizex+x]=s
-
-print("Calcul de P_pi...[25x25]")
-P_pi=np.zeros((sizey*sizex,sizey*sizex))
-for y_pi in range(sizey):
-	for x_pi in range(sizex):	
-		for y in range(sizey):
-			for x in range(sizex):
-				for a in range(4):
-					P_pi[y_pi*sizex+x_pi][y*sizex+x] += prob_action * proba_transition[y_pi*sizex+x_pi][y*sizex+x][a]
-
-print("Calcul de la fonction de Valeur = (I - (0.9 * P_pi))^-1 * R_pi )")
-#(I - (Gamma * P_pi))^-1 * R_pi
-gamma=0.9
-V = np.dot(np.linalg.inv(np.subtract(np.identity(sizey*sizex), np.multiply(gamma, P_pi))), R_pi)
-for y in range(sizey):
-	line = "" 
-	for x in range(sizex):
-		line += str(V[y*sizex+x]) + "\t"
-	print(line)
