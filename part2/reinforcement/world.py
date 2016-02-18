@@ -26,6 +26,7 @@ def init():
 	print("Grille de taille 12x4 = 48")
 
 	print("Initialisation de la matrice de recompenses... [48x4]")
+	print("-100 pour sortir de la falaise, -1 à chaque mouvement.")
 
 	for y in range(sizey):
 		for x in range(sizex):
@@ -33,10 +34,10 @@ def init():
 				if y*sizex+x in cliff:
 					rewards[y*sizex+x][a] = -100
 				else:
-					rewards[y*sizex+x][a] = 0
+					rewards[y*sizex+x][a] = -1		
+			
 
 	print("Initialisation de la matrice de transitions...[48x4]")
-
 	for y in range(sizey):
 		for x in range(sizex):
 			for a in range(4):
@@ -52,6 +53,7 @@ def init():
 					transition[y*sizex+x][a] = ((y+1)*sizex)+x
 				else:
 					transition[y*sizex+x][a] = y*sizex+x-1
+
 	return sizex,sizey,start,goal,cliff,transition,rewards
 
 #to display the world

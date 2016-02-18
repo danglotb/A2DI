@@ -1,6 +1,0 @@
-Tp3 : Bandit
-
-Les appels aux differentes fonctions sont codées, mais seul thompsons_sampling n'est pas commenté. Il suffit
-de commentés / décommentés les appels des fonctions que l'on souhaite.
-
-J'ai donné des graphes pour chacunes des fonctions avec 50 pas de temps, 10 bras et 30 repetition de la meme experience.

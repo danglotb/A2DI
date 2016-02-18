@@ -137,15 +137,22 @@ nbrun=30#nombre de repetition de l'experience
 vi = []#distribution de probabilité de reussite pour chaque bras
 for i in range(k):
 	vi.append(random.random())
-
 best_arm = max(vi)#recuperation du "meilleur" bras pour calculer le regret (apres experience)
+
+print("TP Bandit...")
+print(str(k) + " bras différents avec une distribution aléatoire de probabilité de reussite : ")
+print(vi)
+print(str(nbrun) + " répétitions pour chaque stratégie avec " +str(n) +" tic (budget)")
+print("Calcul des moyennes de regret et de gain pour chacune d'entres elles.")
 
 '''
 ##################  EPSILON GREEDY   ##################"
 '''
 
-loose_at_t = np.zeros((nbrun,n))
-gain_total = np.zeros((nbrun,n))
+print("1. EPSILON GREEDY...")
+
+loose_at_t_g = np.zeros((nbrun,n))
+gain_total_g = np.zeros((nbrun,n))
 
 for run in range(nbrun):
 
@@ -159,35 +166,31 @@ for run in range(nbrun):
 	Ti=ret[0]
 
 	for i in range(n):
-		loose_at_t[run][i] = best_arm-vi[Ti[i]]
+		loose_at_t_g[run][i] = best_arm-vi[Ti[i]]
 		total_at_t = 0
 		for z in range(k):
 			total_at_t += Xi[i][z]
-		gain_total[run][i] = total_at_t
+		gain_total_g[run][i] = total_at_t
 
 #calcul des moyennes de gain et de regret
 for i in range(n):
 	cum_gain = 0
 	cum_loose = 0
 	for run in range(nbrun):
-		cum_gain += gain_total[run][i]
-		cum_loose += loose_at_t[run][i]
-	gain_total[0][i] = (cum_gain / nbrun)
-	loose_at_t[0][i] = (cum_loose / nbrun)
-
-x=np.arange(0,n)
-plt.plot(x,np.cumsum(loose_at_t[0]), label='regret')
-plt.plot(x,gain_total[0],label='gain')
-plt.xlabel("EPSILON GREEDY")
-plt.legend(loc='lower right')
-plt.show()
+		cum_gain += gain_total_g[run][i]
+		cum_loose += loose_at_t_g[run][i]
+	gain_total_g[0][i] = (cum_gain / nbrun)
+	loose_at_t_g[0][i] = (cum_loose / nbrun)
 
 '''
 ##################  SOFTMAX  ##################"
 '''
 
-loose_at_t = np.zeros((nbrun,n))
-gain_total = np.zeros((nbrun,n))
+
+print("2. SOFTMAX...")
+
+loose_at_t_s = np.zeros((nbrun,n))
+gain_total_s = np.zeros((nbrun,n))
 
 for run in range(nbrun):
 
@@ -197,35 +200,31 @@ for run in range(nbrun):
 	Ti=ret[0]
 
 	for i in range(n):
-		loose_at_t[run][i] = best_arm-vi[Ti[i]]
+		loose_at_t_s[run][i] = best_arm-vi[Ti[i]]
 		total_at_t = 0
 		for z in range(k):
 			total_at_t += Xi[i][z]
-		gain_total[run][i] = total_at_t
+		gain_total_s[run][i] = total_at_t
 
 #calcul des moyennes de gain et de regret
 for i in range(n):
 	cum_gain = 0
 	cum_loose = 0
 	for run in range(nbrun):
-		cum_gain += gain_total[run][i]
-		cum_loose += loose_at_t[run][i]
-	gain_total[0][i] = (cum_gain / nbrun)
-	loose_at_t[0][i] = (cum_loose / nbrun)
-
-x=np.arange(0,n)
-plt.plot(x,np.cumsum(loose_at_t[0]), label='regret')
-plt.plot(x,gain_total[0],label='gain')
-plt.xlabel("SOFTMAX")
-plt.legend(loc='lower right')
-plt.show()
+		cum_gain += gain_total_s[run][i]
+		cum_loose += loose_at_t_s[run][i]
+	gain_total_s[0][i] = (cum_gain / nbrun)
+	loose_at_t_s[0][i] = (cum_loose / nbrun)
 
 '''
 ##################  THOMPSON_SAMPLING   ##################"
 '''
 
-loose_at_t = np.zeros((nbrun,n))
-gain_total = np.zeros((nbrun,n))
+
+print("3. THOMPSON SAMPLING...")
+
+loose_at_t_t = np.zeros((nbrun,n))
+gain_total_t = np.zeros((nbrun,n))
 
 for run in range(nbrun):
 
@@ -235,35 +234,31 @@ for run in range(nbrun):
 	Ti=ret[0]
 
 	for i in range(n):
-		loose_at_t[run][i] = best_arm-vi[Ti[i]]
+		loose_at_t_t[run][i] = best_arm-vi[Ti[i]]
 		total_at_t = 0
 		for z in range(k):
 			total_at_t += Xi[i][z]
-		gain_total[run][i] = total_at_t
+		gain_total_t[run][i] = total_at_t
 
 #calcul des moyennes de gain et de regret
 for i in range(n):
 	cum_gain = 0
 	cum_loose = 0
 	for run in range(nbrun):
-		cum_gain += gain_total[run][i]
-		cum_loose += loose_at_t[run][i]
-	gain_total[0][i] = (cum_gain / nbrun)
-	loose_at_t[0][i] = (cum_loose / nbrun)
-
-x=np.arange(0,n)
-plt.plot(x,np.cumsum(loose_at_t[0]), label='regret')
-plt.plot(x,gain_total[0],label='gain')
-plt.xlabel("THOMPSON SAMPLING")
-plt.legend(loc='lower right')
-plt.show()
+		cum_gain += gain_total_t[run][i]
+		cum_loose += loose_at_t_t[run][i]
+	gain_total_t[0][i] = (cum_gain / nbrun)
+	loose_at_t_t[0][i] = (cum_loose / nbrun)
 
 '''
 ##################  UPPER CONFIDENCE BOUND   ##################"
 '''
 
-loose_at_t = np.zeros((nbrun,n))
-gain_total = np.zeros((nbrun,n))
+loose_at_t_u = np.zeros((nbrun,n))
+gain_total_u = np.zeros((nbrun,n))
+
+
+print("4. UCB...")
 
 for run in range(nbrun):
 
@@ -272,26 +267,56 @@ for run in range(nbrun):
 	Xi=ret[1]
 	Ti=ret[0]
 
+
 	for i in range(n):
-		loose_at_t[run][i] = best_arm-vi[Ti[i]]
+		loose_at_t_u[run][i] = best_arm-vi[Ti[i]]
 		total_at_t = 0
 		for z in range(k):
 			total_at_t += Xi[i][z]
-		gain_total[run][i] = total_at_t
+		gain_total_u[run][i] = total_at_t
 
 #calcul des moyennes de gain et de regret
 for i in range(n):
 	cum_gain = 0
 	cum_loose = 0
 	for run in range(nbrun):
-		cum_gain += gain_total[run][i]
-		cum_loose += loose_at_t[run][i]
-	gain_total[0][i] = (cum_gain / nbrun)
-	loose_at_t[0][i] = (cum_loose / nbrun)
+		cum_gain += gain_total_u[run][i]
+		cum_loose += loose_at_t_u[run][i]
+	gain_total_u[0][i] = (cum_gain / nbrun)
+	loose_at_t_u[0][i] = (cum_loose / nbrun)
 
 x=np.arange(0,n)
-plt.plot(x,np.cumsum(loose_at_t[0]), label='regret')
-plt.plot(x,gain_total[0],label='gain')
-plt.xlabel("UCB")
+plt.subplot(1,2,1)
+'''
+plt.plot(x,np.cumsum(loose_at_t_g[0]), label='E-Greedy')
+plt.plot(x,np.cumsum(loose_at_t_s[0]), label='Softmax')
+plt.plot(x,np.cumsum(loose_at_t_t[0]), label='Thompson sampling')
+plt.plot(x,np.cumsum(loose_at_t_u[0]), label='UCB')
+'''
+
+plt.plot(x,np.cumsum(loose_at_t_g[0]), label='E-Greedy')
+plt.plot(x,np.cumsum(loose_at_t_s[0]), label='Softmax')
+plt.plot(x,np.cumsum(loose_at_t_t[0]), label='Thompson sampling')
+plt.plot(x,np.cumsum(loose_at_t_u[0]), label='UCB')
+
+plt.title("regret")
+plt.xlabel("budget")
+plt.legend(loc='lower right')
+
+plt.subplot(1,2,2)
+plt.plot(x,gain_total_g[0], label='E-Greedy')
+plt.plot(x,gain_total_s[0], label='Softmax')
+plt.plot(x,gain_total_t[0], label='Thompson sampling')
+plt.plot(x,gain_total_u[0], label='UCB')
+plt.title("gain")
+plt.xlabel("budget")
 plt.legend(loc='lower right')
 plt.show()
+
+print("Les courbes de regret (cumule) ont tendances à decelerer tandis que les celles des gains ne cessent de croitre.")
+
+print
+
+print("La stratégie Softmax obtient en moyennen les meilleurs resultats : un regret plus faible et le plus grand des gains.")
+print("La stratégie Thompson sampling est parfois meilleur que le Softmax, et parfois la pire des stratégies.") 
+print("Ceci peut s'expliquer par les différentes distributions des probabilités sur les bras.")

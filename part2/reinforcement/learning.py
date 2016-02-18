@@ -5,9 +5,7 @@ import math
 #from matplotlib import pyplot as plt
 import sys
 import world
-
-epsilon=0.8
-
+epsilon=0.85
 #Function E-greedy which return the best action
 def selectAction(Q,state,explore=True):
 	maxQ=-sys.maxsize
@@ -31,41 +29,52 @@ def selectAction(Q,state,explore=True):
 			selectedAction = -1
 	if not selectedAction == -1:
 		return selectedAction
-	else:
-		return possibleAction[random.randint(0,len(possibleAction)-1)]
+	else:	
+		if (len(possibleAction) > 0):
+			return possibleAction[random.randint(0,len(possibleAction)-1)]
+		else:
+			return random.randint(0,3)
 
 def sarsa(nbTrial,gamma,alpha,debug=False):
-	print("Sarsa learning")
-	array_rewards=[]
-	Q=np.ones((world.sizex*world.sizey, 4))
-	for i in range(nbTrial):
+	print("Sarsa learning avec " + str(nbTrial) + " iterations...")
+	rewards = []
+	Q=np.zeros((world.sizex*world.sizey, 4))
+	for _ in range(nbTrial):
+		reward = 0
+		cpt = 0
 		if debug:
 			print(i)
 		s = world.start
 		a = selectAction(Q,s)
 		while not s == world.goal:
 			r = world.rewards[s][a]
-			array_rewards.append(r)
+			reward += r
 			s_p = world.transition[s][a]
 			a_p = selectAction(Q,s_p)
 			Q[s][a] = Q[s][a] + (alpha * (r + gamma*Q[s_p][a_p] - Q[s][a]))
 			s = s_p
 			a = a_p
-	return (sum(array_rewards)/nbTrial),Q
+			cpt += 1
+		rewards.append(reward/cpt)
+	return rewards,Q
 
 def QLearning(nbTrial,gamma,alpha,debug=False):
-	print("QLearning")
-	array_rewards=[]
-	Q=np.ones((world.sizex*world.sizey, 4))
-	for i in range(nbTrial):
+	print("QLearning avec " + str(nbTrial) + " iterations...")
+	rewards = []
+	Q=np.zeros((world.sizex*world.sizey, 4))
+	for _ in range(nbTrial):
+		reward = 0
+		cpt = 0
 		if debug:
-				print(i)
+			print(i)
 		s = world.start
 		while not s == world.goal:
 			a = selectAction(Q,s)
 			s_p = world.transition[s][a]
 			r = world.rewards[s][a]
-			array_rewards.append(r)
-			Q[s][a] = Q[s][a] + (alpha * (r + gamma*Q[s_p][a] - Q[s][a]))
+			reward += r
+			Q[s][a] = Q[s][a] + (alpha * (r + gamma* max(Q[s_p]) - Q[s][a]))
 			s = s_p
-	return (sum(array_rewards)/nbTrial),Q
+			cpt += 1
+		rewards.append(reward/cpt)
+	return rewards,Q

@@ -1,0 +1,7 @@
+Benjamin DANGLOT - Tp3 : Bandit
+
+Coder en python3.
+
+Le script va lancer les 4 stratégies (E-GREEDY, Softmax, Thompson_sampling, UCB) avec la même distribution de probabilité sur les 10 bras.
+Il affichera les courbes des regrets cumules a gauche et le gain cumules a droite sur 100 tic (moyenner sur 30 run)
+
